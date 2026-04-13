@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 250" width="240" height="250">
+  <defs>
+    <style>
+      text { font-family: 'Arial Black', 'Outfit', Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <!--
+    SESO DESIGN Logo
+    S = 3 speed-cut horizontal bars with left vertical
+    E = 3 bars with left vertical + top speed extensions
+    S = same as top S
+    O = rounded rectangle outline
+  -->
+
+  <!-- ═══════ TOP ROW: S + E ═══════ -->
+
+  <!-- S top-left -->
+  <!-- Bar 1 (top) -->
+  <path d="M8,4 L8,18 L22,18 L68,18 L80,4 Z" fill="#111111"/>
+  <path d="M68,18 L80,4 L92,4 L80,18 Z" fill="#222222"/>
+
+  <!-- Bar 2 (mid) - offset right -->
+  <path d="M28,30 L68,30 L80,42 L68,42 Z" fill="#111111"/>
+  <path d="M68,30 L80,30 L92,30 L80,42 Z" fill="#222222"/>
+
+  <!-- Bar 3 (bottom) -->
+  <path d="M8,54 L8,68 L22,68 L68,68 L80,54 Z" fill="#111111"/>
+  <path d="M68,68 L80,54 L92,54 L80,68 Z" fill="#222222"/>
+
+  <!-- S left connector -->
+  <rect x="8" y="4" width="14" height="64" fill="#111111"/>
+
+  <!-- S diagonal connectors -->
+  <path d="M8,18 L28,30 L28,42 L8,54" fill="#111111"/>
+
+
+  <!-- E top-right -->
+  <!-- Bar 1 (top) with extended speed lines -->
+  <path d="M112,4 L112,18 L126,18 L172,18 L184,4 Z" fill="#111111"/>
+  <path d="M172,18 L184,4 L196,4 L184,18 Z" fill="#222222"/>
+  <path d="M184,4 L196,4 L208,4 L196,14 Z" fill="#1a1a1a"/>
+
+  <!-- Bar 2 (mid) -->
+  <path d="M112,30 L172,30 L184,42 L172,42 L126,42 L112,42 Z" fill="#111111"/>
+
+  <!-- Bar 3 (bottom) -->
+  <path d="M112,54 L112,68 L126,68 L172,68 L184,54 Z" fill="#111111"/>
+  <path d="M172,68 L184,54 L196,54 L184,68 Z" fill="#222222"/>
+
+  <!-- E left connector -->
+  <rect x="112" y="4" width="14" height="64" fill="#111111"/>
+
+
+  <!-- ═══════ BOTTOM ROW: S + O ═══════ -->
+
+  <!-- S bottom-left (same as top S, shifted down) -->
+  <path d="M8,84 L8,98 L22,98 L68,98 L80,84 Z" fill="#111111"/>
+  <path d="M68,98 L80,84 L92,84 L80,98 Z" fill="#222222"/>
+
+  <path d="M28,110 L68,110 L80,122 L68,122 Z" fill="#111111"/>
+  <path d="M68,110 L80,110 L92,110 L80,122 Z" fill="#222222"/>
+
+  <path d="M8,134 L8,148 L22,148 L68,148 L80,134 Z" fill="#111111"/>
+  <path d="M68,148 L80,134 L92,134 L80,148 Z" fill="#222222"/>
+
+  <rect x="8" y="84" width="14" height="64" fill="#111111"/>
+  <path d="M8,98 L28,110 L28,122 L8,134" fill="#111111"/>
+
+
+  <!-- O bottom-right -->
+  <rect x="116" y="88" width="72" height="56" rx="10" ry="10" fill="none" stroke="#111111" stroke-width="13" stroke-linejoin="round"/>
+
+
+  <!-- ═══════ DESIGN BAR ═══════ -->
+  <rect x="8" y="168" width="200" height="36" rx="5" fill="#E5A620"/>
+  <text x="108" y="193" text-anchor="middle" font-size="21" font-weight="900" letter-spacing="5" fill="#fff">DESIGN</text>
+</svg>

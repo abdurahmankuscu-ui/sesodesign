@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proje Detayı — SESO Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-alt: #f5f5f5;
+      --text: #1a1a1a;
+      --text-muted: #666666;
+      --text-light: #999999;
+      --accent: #06D85F;
+      --accent-hover: #05c254;
+      --border: #e8e8e8;
+      --border-light: #f0f0f0;
+      --font: 'Poppins', sans-serif;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+    ::selection { background: var(--accent); color: #fff; }
+    img { max-width: 100%; display: block; }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 0 clamp(24px, 4vw, 60px);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 80px;
+    }
+
+    .nav-logo img { height: 101px; width: auto; }
+
+    .nav-links { display: flex; gap: 0; list-style: none; }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 10px 24px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* BACK BUTTON */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: color var(--transition);
+      margin-bottom: 40px;
+    }
+    .back-link:hover { color: var(--accent); }
+    .back-link svg { width: 18px; height: 18px; }
+
+    /* PROJECT HERO */
+    .project-hero {
+      width: 100%;
+      max-height: 70vh;
+      overflow: hidden;
+      background: var(--bg-alt);
+      margin-top: 80px;
+    }
+
+    .project-hero img {
+      width: 100%;
+      height: 70vh;
+      object-fit: contain;
+      background: #1a1a1a;
+    }
+
+    /* PROJECT CONTENT */
+    .project-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: clamp(40px, 6vw, 80px) clamp(24px, 4vw, 60px);
+    }
+
+    .project-category-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .project-title {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 32px;
+    }
+
+    .project-description {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.9;
+      margin-bottom: 48px;
+    }
+
+    /* PROJECT DETAILS GRID */
+    .project-details {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 60px;
+    }
+
+    .project-detail-item {
+      padding: 24px 0;
+      border-right: 1px solid var(--border);
+    }
+    .project-detail-item:last-child { border-right: none; }
+
+    .project-detail-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-light);
+      margin-bottom: 6px;
+    }
+
+    .project-detail-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    /* GALLERY */
+    .project-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-bottom: 60px;
+    }
+
+    .project-gallery img {
+      width: 100%;
+      background: var(--bg-alt);
+    }
+
+    /* NAV BETWEEN PROJECTS */
+    .project-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .project-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: color var(--transition);
+    }
+    .project-nav a:hover { color: var(--accent); }
+    .project-nav svg { width: 18px; height: 18px; }
+
+    /* FOOTER */
+    footer {
+      padding: 48px clamp(24px, 4vw, 60px);
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-left { font-size: 0.8rem; color: var(--text-muted); font-weight: 300; }
+    .footer-logo { height: 162px; width: auto; opacity: 1; margin-bottom: 12px; }
+    .footer-links { display: flex; gap: 32px; list-style: none; }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color var(--transition);
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .fade-in { opacity: 0; transform: translateY(30px); animation: fadeUp 0.8s var(--ease) 0.2s forwards; }
+    .fade-in-d1 { animation-delay: 0.3s; }
+    .fade-in-d2 { animation-delay: 0.4s; }
+    .fade-in-d3 { animation-delay: 0.5s; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-inner { height: 64px; }
+      .nav-logo img { height: 56px; }
+      .nav-links { display: none; }
+      .project-hero img { height: 40vh; }
+      .project-details { grid-template-columns: 1fr; }
+      .project-detail-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .project-detail-item:last-child { border-bottom: none; }
+      .project-title { font-size: 1.8rem; }
+      .footer-inner { flex-direction: column; text-align: center; align-items: center; }
+      .footer-logo { height: 100px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><img src="assets/logo-sm.png" alt="SESO Design" /></a>
+      <ul class="nav-links">
+        <li><a href="index.html#works">Projeler</a></li>
+        <li><a href="index.html#about">Hakkımda</a></li>
+        <li><a href="index.html#contact">İletişim</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- PROJECT HERO IMAGE -->
+  <div class="project-hero fade-in" id="projectHero">
+    <img id="heroImg" src="" alt="" />
+  </div>
+
+  <!-- PROJECT CONTENT -->
+  <div class="project-content">
+    <a href="index.html#works" class="back-link fade-in">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Tüm Projeler
+    </a>
+
+    <div class="project-category-label fade-in" id="projCategory"></div>
+    <h1 class="project-title fade-in fade-in-d1" id="projTitle"></h1>
+    <div class="project-description fade-in fade-in-d2" id="projDesc"></div>
+
+    <div class="project-details fade-in fade-in-d2" id="projDetails">
+      <div class="project-detail-item">
+        <div class="project-detail-label">Kategori</div>
+        <div class="project-detail-value" id="detailCategory"></div>
+      </div>
+      <div class="project-detail-item">
+        <div class="project-detail-label">Tasarımcı</div>
+        <div class="project-detail-value">Selami Soylu</div>
+      </div>
+      <div class="project-detail-item">
+        <div class="project-detail-label">Stüdyo</div>
+        <div class="project-detail-value">SESO Design</div>
+      </div>
+    </div>
+
+    <!-- EXTRA IMAGES -->
+    <div class="project-gallery fade-in fade-in-d3" id="projGallery"></div>
+
+    <!-- PREV / NEXT NAV -->
+    <div class="project-nav" id="projNav"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">
+        <img src="assets/logo-sm.png" alt="SESO" class="footer-logo" />
+        <div>Endüstriyel Tasarım Stüdyosu, İstanbul</div>
+      </div>
+      <ul class="footer-links">
+        <li><a href="https://www.instagram.com/sesodesignstudio" target="_blank">Instagram</a></li>
+        <li><a href="https://www.linkedin.com/in/selami-soylu-a6644111a" target="_blank">LinkedIn</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    // Project database
+    const projects = [
+      {
+        id: 'raptor',
+        category: 'Otomotiv',
+        title: 'Raptor Otonom Traktör',
+        desc: 'Valtra Design Challenge 2017 finalisti olan bu proje, gelecek nesil otonom elektrikli traktör konseptini ele almaktadır.\n\nTasarıma başlamadan önce traktörün tarihî gelişimine bakıldığında, 150 yılı aşkın bir geçmişi olan traktör günümüze dek formunu koruyarak gelmiştir. Gelişen teknoloji ve araştırmalara göre geleceğe dönük olarak insansız, kendi kararlarını alan ve uygulayan otonom, elektrikli bir traktör tasarımı hedeflenmiştir.\n\nAlt gövde bileşenlerden oluşmaktadır. Üst gövde elektronik ve ana sistemleri/parçaları barındırmaktadır. Her tekerleğinde bağımsız bir elektrik motoru bulunmaktadır. Ayrıca arazi farklılıklarına göre basınç ayarları otomatik olarak ayarlanmaktadır; bu sayede her zeminde maksimum tutunabilmektedir.',
+        images: ['assets/projects/raptor1.jpg', 'assets/projects/raptor2.jpg'],
+        mainImage: 'assets/projects/raptor1.jpg'
+      },
+      {
+        id: 'raptor-render',
+        category: 'Otomotiv',
+        title: 'Raptor 3D Görselleştirme',
+        desc: 'Otonom traktör tasarımının farklı açılardan detaylı 3D görselleştirilmesi. Tasarımın her yönünü incelemek ve sunum kalitesini artırmak amacıyla hazırlanan render çalışmaları.',
+        images: ['assets/projects/raptor2.jpg'],
+        mainImage: 'assets/projects/raptor2.jpg'
+      },
+      {
+        id: 'highline',
+        category: 'Mobilya',
+        title: 'High Line Engelli Mobilyası',
+        desc: '13. Ulusal Ev Mobilyaları Tasarım Yarışması Engelli Kategorisi Birincilik Ödülü.\n\nHerkes için Mobilya Konu başlığı altında Giysi ve Eşya Depolama Birimlerinden olan Gardırobu ele alarak engelli kullanıcılarımızın sorunlarını dikkate alarak sade, modern ve estetik bir tasarım ile kullanıcılarımızı ötekileştirmeyen sorunlarına cevap verebilecek bir üründür.\n\nEngelli kullanıcılarımızın yaklaşma, erişme gibi birçok sorunları mevcut. Bunun yanı sıra standart olarak alınan bir depolama biriminin boy olarak %30-40\'ına erişim sağlamaktadırlar ve ayrıca derinlik kullanımında da sıkıntı çekmektedirler.\n\nÜrünümüzde ahşabın yanı sıra daha farklı malzeme alternatifleriyle ürünümüze farklılık getirmenin yanı sıra sorunları çözmeyi hedeflemekteyiz. Örneğin kapaklarımızın şeffaf malzemeden olması kullanıcılarımızın rahatlıkla neyin nerede olabildiğini görerek istediği ürünü alabilmesine imkân sağlar.',
+        images: ['assets/projects/highline.jpg'],
+        mainImage: 'assets/projects/highline.jpg'
+      },
+      {
+        id: 'sweep',
+        category: 'Tüketici Elektroniği',
+        title: 'Sweep 3D Tarayıcı',
+        desc: 'Tersine mühendislik ve kalite kontrol alanlarında kullanılmaktadır.\n\nÜrünümüzün sistemsel yeniliklerinin yanı sıra radikal formuyla diğer rakiplerinden daha üstündür. Sistemsel olarak kablosuz veri aktarımı ve kontrol imkânı, yanı sıra içerisinde bulunan batarya sayesinde uzun saatler çalışma imkânı sağlamaktadır.\n\nTasarımızı baktığımızda rakiplerinin aksine farklı bir tasarım diliyle sade ve modern formuyla ön plana çıkmaktadır.',
+        images: ['assets/projects/sweep.jpg'],
+        mainImage: 'assets/projects/sweep.jpg'
+      },
+      {
+        id: 'ertvision',
+        category: 'Endüstriyel Makine',
+        title: 'ErtVision Kontrol Cihazı',
+        desc: 'Endüstriyel makine sektöründe müşteri taleplerine göre konsept aşamadan üretim modeline kadar tasarlamış olduğum kontrol cihazı full mekanik bağlantı olup kullanışlı ve ergonomik kullanımı olan bir üründür.\n\nAyrıca ürün maket hizmetimizde mevcuttur.',
+        images: ['assets/projects/ertvision13.jpg', 'assets/projects/ertvision1.jpg', 'assets/projects/ertvision2.jpg'],
+        mainImage: 'assets/projects/ertvision13.jpg'
+      },
+      {
+        id: 'ertvision-fuar',
+        category: 'Endüstriyel Makine',
+        title: 'ErtVision Fuar Maketi',
+        desc: 'Ürün maket hizmetimiz kapsamında hazırlanan fuar sergileme modeli. Tasarımın fiziksel olarak deneyimlenmesini ve sergilenmesini sağlamak amacıyla üretilmiştir.',
+        images: ['assets/projects/ertvision1.jpg'],
+        mainImage: 'assets/projects/ertvision1.jpg'
+      },
+      {
+        id: 'concept-0001',
+        category: 'Optik Sistem',
+        title: 'Concept 0001 Optik Ölçüm',
+        desc: 'Kalite sektöründe bir üreticiye tasarlanmış optik ölçüm sistemi.\n\nTasarımın sade ve modern formuyla ön plana çıkan bu ürün, hassas ölçüm gerektiren endüstriyel süreçlerde kullanılmak üzere geliştirilmiştir.',
+        images: ['assets/projects/11.jpg', 'assets/projects/12.jpg'],
+        mainImage: 'assets/projects/11.jpg'
+      },
+      {
+        id: 'concept-0001-detay',
+        category: 'Optik Sistem',
+        title: 'Concept 0001 Detay',
+        desc: 'Optik ölçüm sisteminin farklı açılardan detaylı görünümü.',
+        images: ['assets/projects/12.jpg'],
+        mainImage: 'assets/projects/12.jpg'
+      },
+      {
+        id: 'sketches',
+        category: 'Eskiz',
+        title: 'Konsept Eskizler',
+        desc: 'Çeşitli otomotiv ve endüstriyel tasarım projelerine ait el çizimleri ve eskiz çalışmaları.\n\nHer tasarım sürecinin temelinde yer alan bu eskizler, fikirlerin ilk görsel ifadesidir. Farklı sektörlerden projelere ait konsept arayışları ve form çalışmalarını içermektedir.',
+        images: ['assets/projects/sketches.jpg'],
+        mainImage: 'assets/projects/sketches.jpg'
+      }
+    ];
+
+    // Get project ID from URL
+    const params = new URLSearchParams(window.location.search);
+    const projectId = params.get('id');
+    const projectIndex = projects.findIndex(p => p.id === projectId);
+    const project = projects[projectIndex];
+
+    if (project) {
+      // Set page title
+      document.title = project.title + ' — SESO Design';
+
+      // Hero image
+      document.getElementById('heroImg').src = project.mainImage;
+      document.getElementById('heroImg').alt = project.title;
+
+      // Content
+      document.getElementById('projCategory').textContent = project.category;
+      document.getElementById('projTitle').textContent = project.title;
+      document.getElementById('projDesc').innerHTML = project.desc.replace(/\n/g, '<br/>');
+      document.getElementById('detailCategory').textContent = project.category;
+
+      // Gallery (extra images beyond the main one)
+      const gallery = document.getElementById('projGallery');
+      project.images.forEach((img, i) => {
+        if (img !== project.mainImage) {
+          const imgEl = document.createElement('img');
+          imgEl.src = img;
+          imgEl.alt = project.title + ' - Görsel ' + (i + 1);
+          gallery.appendChild(imgEl);
+        }
+      });
+
+      // Prev / Next navigation
+      const nav = document.getElementById('projNav');
+      const prevIndex = (projectIndex - 1 + projects.length) % projects.length;
+      const nextIndex = (projectIndex + 1) % projects.length;
+
+      nav.innerHTML =
+        '<a href="project.html?id=' + projects[prevIndex].id + '">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>' +
+          projects[prevIndex].title +
+        '</a>' +
+        '<a href="project.html?id=' + projects[nextIndex].id + '">' +
+          projects[nextIndex].title +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>' +
+        '</a>';
+    } else {
+      // Project not found
+      document.querySelector('.project-content').innerHTML =
+        '<div style="text-align:center;padding:100px 0;">' +
+          '<h1 style="font-size:2rem;margin-bottom:16px;">Proje Bulunamadı</h1>' +
+          '<a href="index.html" style="color:var(--accent);">Ana Sayfaya Dön</a>' +
+        '</div>';
+    }
+  </script>
+</body>
+</html>

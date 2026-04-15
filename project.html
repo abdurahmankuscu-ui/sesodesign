@@ -259,17 +259,44 @@
     .fade-in-d3 { animation-delay: 0.5s; }
 
     /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .project-content { padding: clamp(32px, 5vw, 60px) clamp(20px, 4vw, 40px); }
+    }
+
     @media (max-width: 768px) {
-      .nav-inner { height: 64px; }
-      .nav-logo img { height: 56px; }
+      nav { padding: 0 16px; }
+      .nav-inner { height: 60px; }
+      .nav-logo img { height: 50px; }
       .nav-links { display: none; }
-      .project-hero img { height: 40vh; }
+      .project-hero { margin-top: 60px; }
+      .project-hero img { height: 35vh; }
+      .project-content { padding: 32px 20px; }
       .project-details { grid-template-columns: 1fr; }
-      .project-detail-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .project-detail-item { border-right: none; border-bottom: 1px solid var(--border); padding: 16px 0; }
       .project-detail-item:last-child { border-bottom: none; }
-      .project-title { font-size: 1.8rem; }
+      .project-title { font-size: clamp(1.4rem, 5vw, 1.8rem); }
+      .project-category-label { font-size: 0.65rem; }
+      .project-description { font-size: 0.9rem; line-height: 1.7; margin-bottom: 32px; }
+      .back-link { margin-bottom: 24px; font-size: 0.72rem; }
+      .project-nav { padding: 24px 0; flex-direction: column; gap: 16px; align-items: flex-start; }
+      .project-nav a { font-size: 0.75rem; }
       .footer-inner { flex-direction: column; text-align: center; align-items: center; }
-      .footer-logo { height: 100px; }
+      .footer-logo { height: 80px; }
+      .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+    }
+
+    @media (max-width: 480px) {
+      nav { padding: 0 12px; }
+      .nav-inner { height: 52px; }
+      .nav-logo img { height: 42px; }
+      .project-hero { margin-top: 52px; }
+      .project-hero img { height: 28vh; }
+      .project-content { padding: 24px 16px; }
+      .project-title { font-size: 1.3rem; }
+      .project-description { font-size: 0.82rem; }
+      .project-detail-label { font-size: 0.6rem; }
+      .project-detail-value { font-size: 0.85rem; }
+      .gallery-swiper .swiper-slide img { border-radius: 0; }
     }
   </style>
 </head>

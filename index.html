@@ -8,6 +8,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <!-- AOS CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+
   <style>
     :root {
       --bg: #ffffff;
@@ -15,8 +21,8 @@
       --text: #1a1a1a;
       --text-muted: #666666;
       --text-light: #999999;
-      --accent: #06D85F;
-      --accent-hover: #05c254;
+      --accent: #E5A620;
+      --accent-hover: #d4951a;
       --border: #e8e8e8;
       --border-light: #f0f0f0;
       --font: 'Poppins', sans-serif;
@@ -41,13 +47,17 @@
     /* ═══ NAV ═══ */
     nav {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 16px;
+      left: 24px;
+      right: 24px;
       z-index: 1000;
-      padding: 0 clamp(24px, 4vw, 60px);
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border-light);
+      padding: 0 clamp(24px, 4vw, 48px);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(20px) saturate(1.2);
+      -webkit-backdrop-filter: blur(20px) saturate(1.2);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 16px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
       transition: transform 0.5s var(--ease);
     }
 
@@ -74,14 +84,14 @@
     }
 
     .nav-links a {
-      color: var(--text);
+      color: #1a1a1a;
       text-decoration: none;
       font-size: 0.8rem;
       font-weight: 500;
       padding: 10px 24px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      transition: color var(--transition);
+      transition: color var(--transition), text-shadow var(--transition);
       position: relative;
     }
 
@@ -98,45 +108,51 @@
       transition: transform var(--transition);
     }
 
-    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover { color: var(--accent); text-shadow: 0 0 12px rgba(229, 166, 32, 0.6), 0 0 24px rgba(229, 166, 32, 0.3); }
     .nav-links a:hover::after { transform: scaleX(1); }
-    .nav-links a.active { color: var(--accent); }
+    .nav-links a.active { color: var(--accent); text-shadow: 0 0 12px rgba(229, 166, 32, 0.6), 0 0 24px rgba(229, 166, 32, 0.3); }
     .nav-links a.active::after { transform: scaleX(1); }
 
-    .mobile-toggle { display: none; background: none; border: none; color: var(--text); cursor: pointer; padding: 8px; }
+    .nav-social { display: flex; align-items: center; gap: 8px; margin-left: 12px; padding-left: 20px; border-left: 1px solid rgba(0,0,0,0.15); }
+    .nav-social a { padding: 8px !important; display: flex; align-items: center; }
+    .nav-social a::after { display: none !important; }
+
+    .mobile-toggle { display: none; background: none; border: none; color: #1a1a1a; cursor: pointer; padding: 8px; }
     .mobile-toggle svg { width: 24px; height: 24px; }
 
     /* ═══ HERO SLIDER ═══ */
     .hero {
       position: relative;
-      width: 100%;
+      width: 100vw;
       height: 100dvh;
+      margin-top: 0;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .hero-swiper,
+    .hero-swiper .swiper-wrapper,
+    .hero-swiper .swiper-slide {
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-swiper .swiper-slide {
       overflow: hidden;
     }
 
-    .hero-slides {
+    .hero-slide {
       position: relative;
       width: 100%;
       height: 100%;
     }
 
-    .hero-slide {
+    .hero-slide img {
       position: absolute;
       inset: 0;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-
-    .hero-slide.active {
-      opacity: 1;
-      z-index: 1;
-    }
-
-    .hero-slide img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
-      background: #1a1a1a;
+      object-fit: cover;
     }
 
     .hero-slide-overlay {
@@ -170,7 +186,7 @@
     }
 
     .hero-slide-category {
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.2em;
@@ -181,8 +197,8 @@
       transition: all 0.8s var(--ease) 0.1s;
     }
 
-    .hero-slide.active .hero-slide-title,
-    .hero-slide.active .hero-slide-category {
+    .swiper-slide-active .hero-slide-title,
+    .swiper-slide-active .hero-slide-category {
       transform: translateY(0);
       opacity: 1;
     }
@@ -235,7 +251,8 @@
       transition: all var(--transition);
     }
 
-    .hero-dot.active {
+    .hero-dot.active,
+    .hero-dot.swiper-pagination-bullet-active {
       background: var(--accent);
       width: 48px;
     }
@@ -243,6 +260,10 @@
     .hero-dot:hover {
       background: rgba(255,255,255,0.7);
     }
+
+    /* Swiper overrides */
+    .swiper-pagination-custom { display: flex; gap: 8px; }
+    .hero-swiper .swiper-pagination-bullet { border-radius: 0; opacity: 1; }
 
     /* ═══ BUTTONS ═══ */
     .btn {
@@ -293,7 +314,7 @@
     .container { max-width: 1400px; margin: 0 auto; }
 
     .section-label {
-      font-size: 0.68rem;
+      font-size: 0.78rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.2em;
@@ -328,43 +349,52 @@
 
     /* ═══ PORTFOLIO ═══ */
     .portfolio-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
     }
 
     .portfolio-grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
     }
 
     .project-card {
-      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      min-height: 420px;
       overflow: hidden;
       cursor: pointer;
-      group: true;
+      margin-bottom: 48px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .project-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .project-card:nth-child(even) {
+      direction: rtl;
+    }
+    .project-card:nth-child(even) > * {
+      direction: ltr;
     }
 
     .project-card .project-image {
       width: 100%;
-      aspect-ratio: 16 / 9;
+      height: 100%;
+      min-height: 420px;
       overflow: hidden;
       background: var(--bg-alt);
     }
 
-    .project-card.large .project-image {
-      aspect-ratio: 4 / 3;
-    }
-
-    .project-card.large { grid-row: span 2; }
-
     .project-image img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
-      background: var(--bg-alt);
+      object-fit: cover;
       transition: transform 0.8s var(--ease);
     }
 
@@ -386,12 +416,12 @@
     .project-shape { opacity: 0.08; color: var(--text); }
 
     .project-info {
-      padding: 24px 4px;
+      padding: clamp(32px, 4vw, 64px);
     }
 
     .project-category {
       display: inline-block;
-      font-size: 0.62rem;
+      font-size: 0.72rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.15em;
@@ -419,26 +449,19 @@
       font-weight: 300;
     }
 
-    .project-arrow {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transform: translate(-8px, 8px);
-      transition: all 0.5s var(--ease);
+    .project-link-text {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
       color: var(--text);
+      transition: color var(--transition);
     }
 
-    .project-card:hover .project-arrow {
-      opacity: 1;
-      transform: translate(0, 0);
+    .project-card:hover .project-link-text {
+      color: var(--accent);
     }
 
     /* ═══ ABOUT ═══ */
@@ -446,23 +469,28 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: clamp(48px, 6vw, 120px);
-      align-items: center;
+      align-items: stretch;
     }
 
     .about-image {
-      aspect-ratio: 3 / 4;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .about-image-inner {
       width: 100%;
       height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .about-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      width: 80%;
+      height: auto;
+      object-fit: contain;
       transition: transform 0.8s var(--ease);
     }
 
@@ -470,12 +498,18 @@
       transform: scale(1.04);
     }
 
+    .about-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
     .about-text .section-title { margin-bottom: 32px; }
 
     .about-bio {
       color: var(--text-muted);
-      font-size: 1rem;
-      line-height: 1.9;
+      font-size: 0.88rem;
+      line-height: 1.75;
       margin-bottom: 48px;
       font-weight: 300;
     }
@@ -637,38 +671,65 @@
     /* ═══ FOOTER ═══ */
     footer {
       padding: 48px clamp(24px, 4vw, 60px);
-      border-top: 1px solid var(--border);
+      background: rgba(184, 180, 200, 0.45);
+      backdrop-filter: blur(20px) saturate(1.2);
+      -webkit-backdrop-filter: blur(20px) saturate(1.2);
+      border-top: 1px solid rgba(184, 180, 200, 0.3);
+      box-shadow: 0 -4px 30px rgba(184, 180, 200, 0.15);
     }
 
     .footer-inner {
       max-width: 1400px;
       margin: 0 auto;
+      text-align: center;
+    }
+
+    .footer-ref-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text);
+      margin-bottom: 32px;
+    }
+
+    .footer-ref-logos {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       flex-wrap: wrap;
-      gap: 20px;
+      gap: 48px;
     }
 
-    .footer-left { font-size: 0.8rem; color: var(--text-muted); font-weight: 300; }
-    .footer-logo {
-      height: 162px;
-      width: auto;
+    .ref-logo-item {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      opacity: 0.6;
+      transition: all var(--transition);
+      padding: 12px 24px;
+      border: 1px solid rgba(200, 200, 200, 0.4);
+      border-radius: 8px;
+    }
+
+    .ref-logo-item:hover {
       opacity: 1;
-      margin-bottom: 12px;
+      background: rgba(200, 200, 200, 0.15);
     }
 
-    .footer-links { display: flex; gap: 32px; list-style: none; }
-    .footer-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: color var(--transition);
+    .ref-logo-item img {
+      height: 40px;
+      width: auto;
+      object-fit: contain;
+      filter: grayscale(1);
+      opacity: 0.5;
+      transition: all var(--transition);
     }
-    .footer-links a:hover { color: var(--accent); }
+
+    .ref-logo-item:hover img {
+      filter: grayscale(0);
+      opacity: 1;
+    }
 
     /* ═══ ANIMATIONS ═══ */
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
@@ -688,9 +749,8 @@
     @media (max-width: 1024px) {
       .about-grid { grid-template-columns: 1fr; gap: 48px; }
       .about-image { max-height: 500px; aspect-ratio: 16 / 9; }
-      .portfolio-grid, .portfolio-grid-2 { grid-template-columns: 1fr 1fr; }
-      .project-card.large { grid-row: span 1; }
-      .project-card.large .project-image { aspect-ratio: 4 / 3; }
+      .project-card { min-height: 360px; }
+      .project-card .project-image { min-height: 360px; }
       .contact-grid { grid-template-columns: 1fr; gap: 48px; }
     }
 
@@ -719,15 +779,16 @@
       }
       .nav-links a::after { display: none; }
 
-      .hero { min-height: 70dvh; }
+      .hero { height: 100dvh; margin-top: 0; }
       .hero-slide-title { font-size: clamp(1.8rem, 6vw, 2.8rem); }
       .hero-arrow { width: 40px; height: 40px; }
       .hero-arrow svg { width: 16px; height: 16px; }
       .hero-dots { right: 50%; transform: translateX(50%); }
 
-      .portfolio-grid, .portfolio-grid-2 { grid-template-columns: 1fr; }
-      .project-card.large .project-image { aspect-ratio: 16 / 9; }
-      .project-info { padding: 20px 0; }
+      .project-card { grid-template-columns: 1fr; min-height: auto; }
+      .project-card:nth-child(even) { direction: ltr; }
+      .project-card .project-image { min-height: 250px; }
+      .project-info { padding: 24px 20px; }
 
       .about-grid { grid-template-columns: 1fr; gap: 36px; }
       .about-image { aspect-ratio: 4 / 3; max-height: 400px; }
@@ -759,7 +820,15 @@
       <ul class="nav-links">
         <li><a href="#works">Projeler</a></li>
         <li><a href="#about">Hakkımda</a></li>
-        <li><a href="#contact">İletişim</a></li>
+        <li><a href="contact.html">İletişim</a></li>
+        <li class="nav-social">
+          <a href="https://www.instagram.com/sesodesignstudio" target="_blank" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/selami-soylu-a6644111a" target="_blank" aria-label="LinkedIn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </li>
       </ul>
       <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menu">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
@@ -767,67 +836,69 @@
     </div>
   </nav>
 
-  <!-- HERO SLIDER -->
+  <!-- HERO SLIDER (Swiper) -->
   <section class="hero" id="heroSlider">
-    <div class="hero-slides" id="heroSlides">
-      <div class="hero-slide active" onclick="location.href='project.html?id=raptor'" style="cursor:pointer">
-        <img src="assets/projects/raptor1.jpg" alt="Raptor" />
-        <div class="hero-slide-overlay"></div>
-        <div class="hero-slide-content">
-          <div class="hero-slide-category">Otomotiv</div>
-          <div class="hero-slide-title">Raptor Otonom Traktör</div>
+    <div class="swiper hero-swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide hero-slide" onclick="location.href='project.html?id=raptor'" style="cursor:pointer">
+          <img src="assets/projects/raptor1.jpg" alt="Raptor" />
+          <div class="hero-slide-overlay"></div>
+          <div class="hero-slide-content">
+            <div class="hero-slide-category">Otomotiv</div>
+            <div class="hero-slide-title">Raptor Otonom Traktör</div>
+          </div>
+        </div>
+        <div class="swiper-slide hero-slide" onclick="location.href='project.html?id=raptor-render'" style="cursor:pointer">
+          <img src="assets/projects/raptor2.jpg" alt="Raptor" />
+          <div class="hero-slide-overlay"></div>
+          <div class="hero-slide-content">
+            <div class="hero-slide-category">Otomotiv</div>
+            <div class="hero-slide-title">Raptor 3D Görselleştirme</div>
+          </div>
+        </div>
+        <div class="swiper-slide hero-slide" onclick="location.href='project.html?id=sweep'" style="cursor:pointer">
+          <img src="assets/projects/sweep.jpg" alt="Sweep" />
+          <div class="hero-slide-overlay"></div>
+          <div class="hero-slide-content">
+            <div class="hero-slide-category">Tüketici Elektroniği</div>
+            <div class="hero-slide-title">Sweep 3D Tarayıcı</div>
+          </div>
+        </div>
+        <div class="swiper-slide hero-slide" onclick="location.href='project.html?id=highline'" style="cursor:pointer">
+          <img src="assets/projects/highline.jpg" alt="High Line" />
+          <div class="hero-slide-overlay"></div>
+          <div class="hero-slide-content">
+            <div class="hero-slide-category">Mobilya</div>
+            <div class="hero-slide-title">High Line Engelli Mobilyası</div>
+          </div>
+        </div>
+        <div class="swiper-slide hero-slide" onclick="location.href='project.html?id=ertvision'" style="cursor:pointer">
+          <img src="assets/projects/ertvision1.jpg" alt="ErtVision" />
+          <div class="hero-slide-overlay"></div>
+          <div class="hero-slide-content">
+            <div class="hero-slide-category">Endüstriyel Makine</div>
+            <div class="hero-slide-title">ErtVision Kontrol Cihazı</div>
+          </div>
         </div>
       </div>
-      <div class="hero-slide" onclick="location.href='project.html?id=raptor-render'" style="cursor:pointer">
-        <img src="assets/projects/raptor2.jpg" alt="Raptor" />
-        <div class="hero-slide-overlay"></div>
-        <div class="hero-slide-content">
-          <div class="hero-slide-category">Otomotiv</div>
-          <div class="hero-slide-title">Raptor 3D Görselleştirme</div>
-        </div>
+
+      <!-- Arrows -->
+      <div class="hero-arrow hero-arrow-left swiper-button-prev-custom">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 19l-7-7 7-7"/></svg>
       </div>
-      <div class="hero-slide" onclick="location.href='project.html?id=sweep'" style="cursor:pointer">
-        <img src="assets/projects/sweep.jpg" alt="Sweep" />
-        <div class="hero-slide-overlay"></div>
-        <div class="hero-slide-content">
-          <div class="hero-slide-category">Tüketici Elektroniği</div>
-          <div class="hero-slide-title">Sweep 3D Tarayıcı</div>
-        </div>
+      <div class="hero-arrow hero-arrow-right swiper-button-next-custom">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5l7 7-7 7"/></svg>
       </div>
-      <div class="hero-slide" onclick="location.href='project.html?id=highline'" style="cursor:pointer">
-        <img src="assets/projects/highline.jpg" alt="High Line" />
-        <div class="hero-slide-overlay"></div>
-        <div class="hero-slide-content">
-          <div class="hero-slide-category">Mobilya</div>
-          <div class="hero-slide-title">High Line Engelli Mobilyası</div>
-        </div>
-      </div>
-      <div class="hero-slide" onclick="location.href='project.html?id=ertvision'" style="cursor:pointer">
-        <img src="assets/projects/ertvision1.jpg" alt="ErtVision" />
-        <div class="hero-slide-overlay"></div>
-        <div class="hero-slide-content">
-          <div class="hero-slide-category">Endüstriyel Makine</div>
-          <div class="hero-slide-title">ErtVision Kontrol Cihazı</div>
-        </div>
-      </div>
+
+      <!-- Pagination -->
+      <div class="hero-dots swiper-pagination-custom"></div>
     </div>
-
-    <!-- Arrows -->
-    <button class="hero-arrow hero-arrow-left" id="heroPrev" aria-label="Önceki">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 19l-7-7 7-7"/></svg>
-    </button>
-    <button class="hero-arrow hero-arrow-right" id="heroNext" aria-label="Sonraki">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5l7 7-7 7"/></svg>
-    </button>
-
-    <!-- Dots -->
-    <div class="hero-dots" id="heroDots"></div>
   </section>
 
   <!-- WORKS -->
   <section id="works">
     <div class="container">
-      <div class="section-header reveal">
+      <div class="section-header reveal" data-aos="fade-up">
         <div class="section-label">Seçme Projeler</div>
         <h2 class="section-title" id="portfolioTitle">Kalıcı olmak için <strong>tasarlandı</strong></h2>
         <p class="section-desc" id="portfolioDesc">Mobilya, aydınlatma, tüketici ürünleri ve sergi tasarımı alanlarındaki seçme projelerimiz.</p>
@@ -842,26 +913,24 @@
   <section id="about">
     <div class="container">
       <div class="about-grid">
-        <div class="about-image reveal" id="aboutImageWrap">
+        <div class="about-image reveal" id="aboutImageWrap" data-aos="fade-right" data-aos-duration="1000">
           <div class="about-image-inner">
-            <img src="assets/profile-sm.jpg" alt="Selami" />
+            <img src="assets/logo.png" alt="SESO Design" style="object-fit: contain; background: transparent;" />
           </div>
         </div>
-        <div class="about-text reveal reveal-d2">
+        <div class="about-text reveal reveal-d2" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
           <div class="section-label">Hakkımda</div>
           <h2 class="section-title" id="aboutTitle">Tasarım, bir ürünün nasıl göründüğünden çok, <strong>nasıl hissettirdiğidir.</strong></h2>
           <div class="about-bio">
-            <p id="aboutBio1">Bir ürünün değeri sadece estetiğiyle değil, kullanıcıyla kurduğu bağ ile ortaya çıkar. İyi tasarım, dikkat çekmek için bağırmaz — kendini doğal bir şekilde anlatır.</p>
+            <p id="aboutBio1">Otomotivden zırhlı araçlara, ürün tasarımından robotik tasarımlara, endüstriyel makinelerden konsept tasarımlarına kadar geniş bir yelpazede hizmet sunmaktadır. Şirketlerin taleplerine göre özgün ve yaratıcı çözümler sunma yeteneğine sahiptir.</p>
             <br/>
-            <p>Benim için tasarım süreci, yalnızca bir form oluşturmak değil; bir problemi anlamak, doğru çözümü bulmak ve bunu sade bir dille ifade etmektir.</p>
+            <p>Projeleri daha somut ve anlaşılır hale getirmek için endüstriyel prototipler oluşturma kapasitesi, bilgisayarın tasarımları daha iyi görselleştirmesine ve değerlendirmesine olanak tanır. Bu, özellikle büyük projelerde önemli bir avantajdır.</p>
             <br/>
-            <p>Her projeye aynı yaklaşmam. Çünkü her ürünün, her markanın ve her kullanıcının ihtiyacı farklıdır. Bu yüzden tasarım sürecini, o projeye özel bir düşünme biçimi olarak ele alırım.</p>
+            <p>Yüksek hassasiyetli projelerde, şirket, üretimin dijital ortamda doğru bir şekilde planlanmasını ve tasarlanmasını sağlayan A sınıfı kapsamlı bir dağıtım hizmeti sunmaktadır. Bu, kaliteyi artırmaya ve üretim maliyetlerini düşürmeye yardımcı olabilir.</p>
             <br/>
-            <p>Estetik ile işlevi birbirinden ayırmam. Bir ürün hem iyi görünmeli hem de kusursuz çalışmalıdır. Ancak bu denge kurulduğunda ortaya gerçekten güçlü bir tasarım çıkar.</p>
+            <p>Estetik ve teknik güvenliği dengeleyerek, hem işlevsel hem de görsel olarak anlaşılır ürünler üretilebilir. Bu denge, otomotiv ve zırhlı araç endüstrilerinde kritik öneme sahiptir, bu nedenle tasarım ekibinizin yetkinliği önemli bir fark yaratır.</p>
             <br/>
-            <p>Farklı sektörlerde edindiğim deneyim, bana esnek düşünmeyi ve detaylara dikkat etmeyi öğretti. Bugün İstanbul merkezli çalışıyor, farklı bakış açılarını bir araya getirerek kalıcı ve anlamlı tasarımlar üretmeye odaklanıyorum.</p>
-            <br/>
-            <p id="aboutBio2"><strong>Çünkü benim için tasarım: Sadece bir ürün ortaya koymak değil, deneyim yaratmaktır.</strong></p>
+            <p id="aboutBio2"><strong>Bu noktalara vurgu yaparak, yeteneklerinizi açıkça ortaya koyar ve hedef kitlenizi daha iyi etkiler.</strong></p>
           </div>
           <div class="about-stats">
             <div class="stat-item"><div class="stat-number" id="stat1val">12+</div><div class="stat-label" id="stat1label">Yıl Deneyim</div></div>
@@ -875,52 +944,119 @@
 
   <div id="extraSections"></div>
 
-  <hr class="section-divider" />
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <div class="contact-grid">
-        <div class="contact-left reveal">
-          <div class="section-label">İletişim</div>
-          <h2 class="section-title" id="contactTitle">Kalıcı bir şey <strong>inşa edelim</strong></h2>
-          <p id="contactDesc">İyi tasarım bir sohbetle başlar. Bir sonraki projenizi konuşmak için bize ulaşın.</p>
-          <div class="contact-details" id="contactDetails"></div>
-        </div>
-        <div class="contact-form-wrap reveal reveal-d2">
-          <form class="contact-form" id="contactForm" action="https://formsubmit.co/sesodesignstudio@gmail.com" method="POST">
-            <input type="hidden" name="_subject" value="SESO Design - Yeni İletişim Formu" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_next" value="" id="formRedirect" />
-            <input type="hidden" name="_template" value="table" />
-            <div class="form-row">
-              <div class="form-group"><label>İSİM</label><input name="isim" placeholder="Adınız" required /></div>
-              <div class="form-group"><label>E-POSTA</label><input type="email" name="eposta" placeholder="örnek@email.com" required /></div>
-            </div>
-            <div class="form-group"><label>PROJE TÜRÜ</label><input name="proje_turu" placeholder="Ürün tasarımı, mobilya, danışmanlık..." /></div>
-            <div class="form-group"><label>MESAJ</label><textarea name="mesaj" placeholder="Projeniz hakkında bilgi verin..." required></textarea></div>
-            <button type="submit" class="btn btn-primary" style="width:100%;">MESAJ GÖNDER</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
+  <!-- FOOTER - REFERANSLAR -->
   <footer>
     <div class="footer-inner">
-      <div class="footer-left">
-        <img src="assets/logo-sm.png" alt="SESO" class="footer-logo" />
-        <div id="footerSub">Endüstriyel Tasarım Stüdyosu, İstanbul</div>
+      <div class="footer-ref-title">Referanslarımız</div>
+      <div class="footer-ref-logos" id="refLogos">
+        <div class="ref-logo-item">Şirket 1</div>
+        <div class="ref-logo-item">Şirket 2</div>
+        <div class="ref-logo-item">Şirket 3</div>
+        <div class="ref-logo-item">Şirket 4</div>
+        <div class="ref-logo-item">Şirket 5</div>
+        <div class="ref-logo-item">Şirket 6</div>
       </div>
-      <ul class="footer-links" id="footerLinks">
-        <li><a href="https://www.instagram.com/sesodesignstudio" target="_blank">Instagram</a></li>
-        <li><a href="https://www.linkedin.com/in/selami-soylu-a6644111a" target="_blank">LinkedIn</a></li>
-      </ul>
     </div>
   </footer>
 
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+
   <script>
+    // ═══ LENIS SMOOTH SCROLL ═══
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // Lenis + ScrollTrigger sync
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+
+    // ═══ AOS INIT ═══
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out-cubic',
+      once: true,
+      offset: 80,
+    });
+
+    // ═══ SWIPER HERO SLIDER ═══
+    const heroSwiper = new Swiper('.hero-swiper', {
+      loop: true,
+      speed: 1000,
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+      autoplay: { delay: 5000, disableOnInteraction: false },
+      navigation: {
+        nextEl: '.swiper-button-next-custom',
+        prevEl: '.swiper-button-prev-custom',
+      },
+      pagination: {
+        el: '.swiper-pagination-custom',
+        clickable: true,
+        renderBullet: function (index, className) {
+          return '<button class="hero-dot ' + className + '" aria-label="Slide ' + (index + 1) + '"></button>';
+        },
+      },
+      on: {
+        slideChangeTransitionStart: function () {
+          const activeSlide = this.slides[this.activeIndex];
+          const title = activeSlide.querySelector('.hero-slide-title');
+          const cat = activeSlide.querySelector('.hero-slide-category');
+          if (title) gsap.fromTo(title, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.2 });
+          if (cat) gsap.fromTo(cat, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.1 });
+        }
+      }
+    });
+
+    // ═══ GSAP SCROLL ANIMATIONS ═══
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animate stat numbers
+    document.querySelectorAll('.stat-number').forEach(el => {
+      const val = parseInt(el.textContent);
+      if (!isNaN(val)) {
+        const suffix = el.textContent.replace(/[0-9]/g, '');
+        gsap.fromTo(el, { textContent: 0 }, {
+          textContent: val,
+          duration: 2,
+          ease: 'power2.out',
+          snap: { textContent: 1 },
+          scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' },
+          onUpdate: function () { el.textContent = Math.round(this.targets()[0].textContent) + suffix; }
+        });
+      }
+    });
+
+    // Parallax on hero
+    gsap.to('.hero-swiper', {
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
+      y: 100,
+      ease: 'none'
+    });
+
+    // Project cards scroll animation
+    ScrollTrigger.batch('.project-card', {
+      onEnter: function(elements) {
+        gsap.fromTo(elements, { y: 40, opacity: 0.3 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: 'power3.out' });
+      },
+      start: 'top 90%',
+      once: true
+    });
+
     const defaultShapes = [
       '<svg class="project-shape" width="200" height="200" viewBox="0 0 200 200"><rect x="30" y="30" width="140" height="140" rx="16" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="100" cy="100" r="50" fill="none" stroke="currentColor" stroke-width="1"/></svg>',
       '<svg class="project-shape" width="160" height="160" viewBox="0 0 160 160"><circle cx="80" cy="80" r="60" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="80" cy="80" r="30" fill="none" stroke="currentColor" stroke-width="1"/></svg>',
@@ -934,11 +1070,9 @@
     function loadSiteData(){const s=localStorage.getItem('selami_site_data');return s?JSON.parse(s):null;}
 
     function renderPortfolio(items){
-      const fi=items.findIndex(p=>p.featured);const f=fi>=0?fi:0;
       let h='<div class="portfolio-grid">';
-      items.slice(0,3).forEach((p,i)=>{h+=pc(p,i,i===f&&i<3);});
+      items.forEach((p,i)=>{h+=pc(p,i,false);});
       h+='</div>';
-      if(items.length>3){h+='<div class="portfolio-grid-2">';items.slice(3).forEach((p,i)=>{h+=pc(p,i+3,false);});h+='</div>';}
       document.getElementById('portfolioGrid').innerHTML=h;
     }
 
@@ -947,7 +1081,7 @@
     function pc(p,i,big){
       const img=p.image?'<img src="'+p.image+'" alt="'+esc(p.title)+'" />':'<div class="project-image-bg">'+defaultShapes[i%defaultShapes.length]+'</div>';
       const pid=projectIds[i]||'raptor';
-      return '<a href="project.html?id='+pid+'" class="project-card '+(big?'large':'')+' reveal '+(i>0?'reveal-d'+Math.min(i,4):'')+'" style="text-decoration:none;color:inherit;"><div class="project-image">'+img+'</div><div class="project-info"><div class="project-category">'+esc(p.category)+'</div><h3>'+esc(p.title)+'</h3><p>'+esc(p.desc)+'</p></div><div class="project-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></div></a>';
+      return '<a href="project.html?id='+pid+'" class="project-card" style="text-decoration:none;color:inherit;"><div class="project-image">'+img+'</div><div class="project-info"><div class="project-category">'+esc(p.category)+'</div><h3>'+esc(p.title)+'</h3><p>'+esc(p.desc)+'</p><span class="project-link-text">Projeyi İncele →</span></div></a>';
     }
 
     function renderContact(c){
@@ -981,6 +1115,9 @@
     function initObs(){const o=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:.08,rootMargin:'0px 0px -60px 0px'});document.querySelectorAll('.reveal').forEach(el=>o.observe(el));}
     initObs();setTimeout(initObs,200);
 
+    // Re-init ScrollTrigger after dynamic content render
+    setTimeout(function(){ ScrollTrigger.refresh(); }, 500);
+
     let ls=0;window.addEventListener('scroll',()=>{const c=window.scrollY;document.querySelector('nav').classList.toggle('hidden',c>ls&&c>120);ls=c;updateActiveNav();},{passive:true});
 
     function updateActiveNav(){
@@ -1004,50 +1141,16 @@
         document.querySelectorAll('.nav-links a').forEach(l=>l.classList.remove('active'));
         this.classList.add('active');
         const t=document.querySelector(this.getAttribute('href'));
-        if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+        if(t)lenis.scrollTo(t);
       });
     });
 
-    document.querySelectorAll('a[href^="#"]:not(.nav-links a)').forEach(a=>{a.addEventListener('click',function(e){e.preventDefault();const t=document.querySelector(this.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});});
+    document.querySelectorAll('a[href^="#"]:not(.nav-links a)').forEach(a=>{a.addEventListener('click',function(e){e.preventDefault();const t=document.querySelector(this.getAttribute('href'));if(t)lenis.scrollTo(t);});});
 
     // Form redirect URL
     document.getElementById('formRedirect').value = window.location.href;
 
-    // ═══ HERO SLIDER ═══
-    (function(){
-      const slides = document.querySelectorAll('.hero-slide');
-      const dotsWrap = document.getElementById('heroDots');
-      let current = 0;
-      let interval;
-
-      // Create dots
-      slides.forEach((_, i) => {
-        const dot = document.createElement('button');
-        dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
-        dot.setAttribute('aria-label', 'Slide ' + (i + 1));
-        dot.addEventListener('click', () => goTo(i));
-        dotsWrap.appendChild(dot);
-      });
-
-      function goTo(index) {
-        slides[current].classList.remove('active');
-        dotsWrap.children[current].classList.remove('active');
-        current = (index + slides.length) % slides.length;
-        slides[current].classList.add('active');
-        dotsWrap.children[current].classList.add('active');
-        resetInterval();
-      }
-
-      function resetInterval() {
-        clearInterval(interval);
-        interval = setInterval(() => goTo(current + 1), 5000);
-      }
-
-      document.getElementById('heroNext').addEventListener('click', () => goTo(current + 1));
-      document.getElementById('heroPrev').addEventListener('click', () => goTo(current - 1));
-
-      resetInterval();
-    })();
+    // Hero slider handled by Swiper above
   </script>
 </body>
 </html>

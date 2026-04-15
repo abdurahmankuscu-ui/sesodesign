@@ -7,6 +7,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <!-- AOS CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+
   <style>
     :root {
       --bg: #ffffff;
@@ -14,8 +20,8 @@
       --text: #1a1a1a;
       --text-muted: #666666;
       --text-light: #999999;
-      --accent: #06D85F;
-      --accent-hover: #05c254;
+      --accent: #E5A620;
+      --accent-hover: #d4951a;
       --border: #e8e8e8;
       --border-light: #f0f0f0;
       --font: 'Poppins', sans-serif;
@@ -106,7 +112,7 @@
     }
 
     .project-category-label {
-      font-size: 0.68rem;
+      font-size: 0.78rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.2em;
@@ -173,6 +179,24 @@
     .project-gallery img {
       width: 100%;
       background: var(--bg-alt);
+    }
+
+    /* Swiper Gallery */
+    .gallery-swiper {
+      width: 100%;
+      margin-bottom: 60px;
+      overflow: hidden;
+    }
+    .gallery-swiper .swiper-slide img {
+      width: 100%;
+      background: var(--bg-alt);
+    }
+    .gallery-swiper .swiper-pagination {
+      position: relative;
+      margin-top: 16px;
+    }
+    .gallery-swiper .swiper-pagination-bullet-active {
+      background: var(--accent);
     }
 
     /* NAV BETWEEN PROJECTS */
@@ -275,11 +299,11 @@
       Tüm Projeler
     </a>
 
-    <div class="project-category-label fade-in" id="projCategory"></div>
-    <h1 class="project-title fade-in fade-in-d1" id="projTitle"></h1>
-    <div class="project-description fade-in fade-in-d2" id="projDesc"></div>
+    <div class="project-category-label fade-in" id="projCategory" data-aos="fade-up"></div>
+    <h1 class="project-title fade-in fade-in-d1" id="projTitle" data-aos="fade-up" data-aos-delay="100"></h1>
+    <div class="project-description fade-in fade-in-d2" id="projDesc" data-aos="fade-up" data-aos-delay="200"></div>
 
-    <div class="project-details fade-in fade-in-d2" id="projDetails">
+    <div class="project-details fade-in fade-in-d2" id="projDetails" data-aos="fade-up" data-aos-delay="300">
       <div class="project-detail-item">
         <div class="project-detail-label">Kategori</div>
         <div class="project-detail-value" id="detailCategory"></div>
@@ -315,7 +339,40 @@
     </div>
   </footer>
 
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+
   <script>
+    // ═══ LENIS SMOOTH SCROLL ═══
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+
+    // ═══ AOS INIT ═══
+    AOS.init({ duration: 800, easing: 'ease-out-cubic', once: true, offset: 60 });
+
+    // ═══ GSAP ═══
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Hero image parallax
+    gsap.to('.project-hero img', {
+      scrollTrigger: { trigger: '.project-hero', start: 'top top', end: 'bottom top', scrub: true },
+      y: 60,
+      scale: 1.05,
+      ease: 'none'
+    });
+
     // Project database
     const projects = [
       {
@@ -412,15 +469,39 @@
       document.getElementById('projDesc').innerHTML = project.desc.replace(/\n/g, '<br/>');
       document.getElementById('detailCategory').textContent = project.category;
 
-      // Gallery (extra images beyond the main one)
+      // Gallery - use Swiper if multiple extra images
       const gallery = document.getElementById('projGallery');
-      project.images.forEach((img, i) => {
-        if (img !== project.mainImage) {
+      const extraImages = project.images.filter(img => img !== project.mainImage);
+
+      if (extraImages.length > 1) {
+        // Create Swiper gallery
+        gallery.innerHTML = '<div class="swiper gallery-swiper"><div class="swiper-wrapper">' +
+          extraImages.map((img, i) => '<div class="swiper-slide"><img src="' + img + '" alt="' + project.title + ' - Görsel ' + (i + 1) + '" /></div>').join('') +
+          '</div><div class="swiper-pagination"></div></div>';
+        gallery.setAttribute('data-aos', 'fade-up');
+        new Swiper('.gallery-swiper', {
+          loop: true,
+          speed: 600,
+          spaceBetween: 24,
+          pagination: { el: '.gallery-swiper .swiper-pagination', clickable: true },
+          autoplay: { delay: 4000, disableOnInteraction: false },
+        });
+      } else {
+        extraImages.forEach((img, i) => {
           const imgEl = document.createElement('img');
           imgEl.src = img;
           imgEl.alt = project.title + ' - Görsel ' + (i + 1);
+          imgEl.setAttribute('data-aos', 'fade-up');
           gallery.appendChild(imgEl);
-        }
+        });
+      }
+
+      // GSAP entry animation for gallery images
+      gsap.utils.toArray('.project-gallery img').forEach(img => {
+        gsap.fromTo(img, { y: 40, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: img, start: 'top 85%', once: true }
+        });
       });
 
       // Prev / Next navigation
